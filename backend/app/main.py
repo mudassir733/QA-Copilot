@@ -1,11 +1,4 @@
-"""
-app/main.py
 
-FastAPI application entry point.
-- Lifespan: startup/shutdown logic (logging, directory creation)
-- CORS: allows Next.js dev server (localhost:3000)
-- Routers: registers all API route modules
-"""
 
 import os
 from contextlib import asynccontextmanager
@@ -17,8 +10,7 @@ from app.core.config import settings
 from app.core.logging import get_logger, setup_logging
 
 # ── Import routers ──────────────────────────────────────────────────────────
-from app.api import health
-
+from app.api import health, collections
 logger = get_logger(__name__)
 
 
@@ -77,6 +69,7 @@ app.add_middleware(
 
 # ── Register Routers ─────────────────────────────────────────────────────────
 app.include_router(health.router)
+app.include_router(collections.router)
 # Step 3: app.include_router(ingest.router)
 # Step 4: app.include_router(chat.router)
 # Step 4: app.include_router(collections.router)

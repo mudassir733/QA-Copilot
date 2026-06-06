@@ -22,13 +22,18 @@ class Settings(BaseSettings):
     gemini_model: str = "gemini-2.0-flash"
     mistral_model: str = "mistral-small-latest"
 
-    # ── Embedding 
+    # ── Embedding
     embedding_provider: Literal["gemini", "huggingface"] = "gemini"
     gemini_embedding_model: str = "models/text-embedding-004"
 
     # ── ChromaDB 
     chroma_persist_dir: str = "./chroma_db"
     chroma_collection_name: str = "qa_copilot"
+
+    # ── RAG / Chunking 
+    chunk_size: int = 500          # tokens per chunk
+    chunk_overlap: int = 50        # overlap between chunks to preserve context
+    retriever_top_k: int = 4       # how many chunks to retrieve per question
 
     # ── File Upload 
     upload_dir: str = "./uploads"
