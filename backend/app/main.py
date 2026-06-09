@@ -9,15 +9,14 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.core.config import settings
 from app.core.logging import get_logger, setup_logging
 
-# ── Import routers ──────────────────────────────────────────────────────────
-from app.api import health, collections
+# ── Import routers 
+from app.api import health, collections, ingest
 logger = get_logger(__name__)
 
-
-# ── Lifespan (replaces deprecated @app.on_event) ────────────────────────────
+# ── Lifespan (replaces deprecated @app.on_event) 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    # ── Startup ──────────────────────────────────────────────
+    # ── Startup 
     setup_logging()
     logger.info("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
     logger.info("  %s  v%s  starting up", settings.app_name, settings.app_version)
@@ -25,19 +24,19 @@ async def lifespan(app: FastAPI):
     logger.info("  Embedding provider   : %s", settings.embedding_provider)
     logger.info("  ChromaDB directory   : %s", settings.chroma_persist_dir)
     logger.info("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
-
+ 
     # Ensure required directories exist
     for directory in [settings.upload_dir, settings.chroma_persist_dir]:
         os.makedirs(directory, exist_ok=True)
         logger.debug("Directory ready: %s", directory)
-
+ 
     yield  # ← app runs here
-
-    # ── Shutdown ─────────────────────────────────────────────
+ 
+    # ── Shutdown 
     logger.info("%s shutting down. Bye!", settings.app_name)
-
-
-# ── App factory ─────────────────────────────────────────────────────────────
+ 
+ 
+# ── App factory 
 app = FastAPI(
     title=settings.app_name,
     version=settings.app_version,
@@ -49,9 +48,9 @@ app = FastAPI(
     docs_url="/docs",       # Swagger UI
     redoc_url="/redoc",     # ReDoc UI
 )
-
-
-# ── CORS ────────────────────────────────────────────────────────────────────
+ 
+ 
+# ── CORS
 # Allows the Next.js dev server and production domain to call this API.
 app.add_middleware(
     CORSMiddleware,
@@ -65,17 +64,16 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-
-# ── Register Routers ─────────────────────────────────────────────────────────
+ 
+ 
+# ── Register Routers
 app.include_router(health.router)
 app.include_router(collections.router)
-# Step 3: app.include_router(ingest.router)
+app.include_router(ingest.router)
 # Step 4: app.include_router(chat.router)
-# Step 4: app.include_router(collections.router)
-
-
-# ── Root ────────────────────────────────────────────────────────────────────
+ 
+ 
+# ── Root 
 @app.get("/", tags=["Root"])
 async def root():
     return {
