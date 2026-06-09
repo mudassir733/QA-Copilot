@@ -10,7 +10,7 @@ from app.core.config import settings
 from app.core.logging import get_logger, setup_logging
 
 # ── Import routers 
-from app.api import health, collections, ingest
+from app.api import health, collections, ingest, chat
 logger = get_logger(__name__)
 
 # ── Lifespan (replaces deprecated @app.on_event) 
@@ -70,7 +70,7 @@ app.add_middleware(
 app.include_router(health.router)
 app.include_router(collections.router)
 app.include_router(ingest.router)
-# Step 4: app.include_router(chat.router)
+app.include_router(chat.router)
  
  
 # ── Root 
