@@ -28,7 +28,7 @@ export default async function UploadPage() {
 
   return (
     <section className="mx-auto max-w-6xl space-y-6 px-4 py-5 sm:px-6 lg:px-8">
-      <div className="rounded-[28px] bg-linear-to-r from-[#377cf6] via-[#2f6df6] to-[#2457ea] px-8 py-8 text-white shadow-[0_18px_40px_rgba(47,109,246,0.28)] dark:from-[#1d4ed8] dark:via-[#1e40af] dark:to-[#1e3a8a]">
+      <div className="rounded-md bg-[#121212] px-8 py-8 text-white shadow-md">
         <div className="flex flex-col gap-8 lg:flex-row lg:items-center lg:justify-between">
           <div className="max-w-2xl">
             <p className="font-technical text-xs uppercase tracking-[0.26em] text-blue-100/80">
@@ -43,7 +43,7 @@ export default async function UploadPage() {
             </p>
           </div>
 
-          <div className="flex h-40 w-40 items-center justify-center rounded-full bg-white/10">
+          <div className="flex h-40 w-40 items-center justify-center rounded-md bg-[#1D1D1C]">
             <svg viewBox="0 0 24 24" className="h-20 w-20 text-white/90" fill="none" stroke="currentColor" strokeWidth="1.6">
               <path d="M12 16V4" />
               <path d="M7.5 8.5 12 4l4.5 4.5" />
@@ -54,19 +54,19 @@ export default async function UploadPage() {
       </div>
 
       <div className="grid gap-4 md:grid-cols-3">
-        <div className="rounded-3xl border border-slate-200 bg-white px-5 py-5 shadow-[0_10px_24px_rgba(148,163,184,0.10)] dark:border-slate-800 dark:bg-slate-900">
+        <div className="rounded-md border border-slate-200 bg-white px-5 py-5  dark:border-slate-800 dark:bg-[#121212]">
           <p className="text-sm text-slate-500 dark:text-slate-400">Indexed documents</p>
           <p className="mt-6 text-4xl font-semibold tracking-tight text-slate-900 dark:text-slate-100">
             {totalDocuments}
           </p>
         </div>
-        <div className="rounded-3xl border border-slate-200 bg-white px-5 py-5 shadow-[0_10px_24px_rgba(148,163,184,0.10)] dark:border-slate-800 dark:bg-slate-900">
+        <div className="rounded-md border border-slate-200 bg-white px-5 py-5  dark:border-slate-800 dark:bg-[#121212]">
           <p className="text-sm text-slate-500 dark:text-slate-400">Total source chunks</p>
           <p className="mt-6 text-4xl font-semibold tracking-tight text-slate-900 dark:text-slate-100">
             {totalChunks}
           </p>
         </div>
-        <div className="rounded-3xl border border-slate-200 bg-white px-5 py-5 shadow-[0_10px_24px_rgba(148,163,184,0.10)] dark:border-slate-800 dark:bg-slate-900">
+        <div className="rounded-md border border-slate-200 bg-white px-5 py-5  dark:border-slate-800 dark:bg-[#121212]">
           <p className="text-sm text-slate-500 dark:text-slate-400">Supported formats</p>
           <p className="mt-6 text-2xl font-semibold tracking-tight text-slate-900 dark:text-slate-100">
             PDF, TXT, DOCX

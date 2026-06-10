@@ -79,10 +79,10 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   return (
     <div className="panel-grid h-screen overflow-hidden bg-background text-foreground">
       <div className="grid h-full lg:grid-cols-[260px_minmax(0,1fr)]">
-        <aside className="hidden h-full border-r border-slate-200/80 bg-white dark:border-slate-800 dark:bg-slate-950 lg:flex lg:flex-col">
+        <aside className="hidden h-full border-r border-slate-200/80 bg-white dark:border-slate-800 dark:bg-[#1D1D1C] lg:flex lg:flex-col">
           <div className="px-7 py-8">
             <div className="flex items-center gap-4">
-              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-linear-to-br from-[#3c82f6] to-[#2554ea] text-white shadow-[0_12px_30px_rgba(59,130,246,0.28)]">
+              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#121212] text-white">
                 <svg viewBox="0 0 24 24" className="h-6 w-6" fill="none" stroke="currentColor" strokeWidth="2">
                   <path d="M3 12h4l2.5-6 5 12 2.5-6H21" />
                 </svg>
@@ -105,10 +105,10 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                     key={item.href}
                     href={item.href}
                     className={[
-                      "flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-medium transition",
+                      "flex items-center gap-3 rounded-md px-4 py-3 text-sm font-medium transition",
                       active
-                        ? "bg-[#edf3ff] text-[#2563eb] dark:bg-blue-500/15 dark:text-blue-300"
-                        : "text-slate-600 hover:bg-slate-50 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-900 dark:hover:text-slate-100",
+                        ? "bg-[#121212] text-[#2563eb] dark:bg-[#121212] dark:text-blue-300"
+                        : "text-slate-600 hover:bg-[#121212] hover:text-slate-900 dark:text-slate-400 dark:hover:bg-[#121212] dark:hover:text-slate-100",
                     ].join(" ")}
                   >
                     <span
@@ -142,7 +142,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           </div>
         </aside>
 
-        <div className="flex min-h-0 flex-col bg-[#f7f9fc] dark:bg-slate-950">
+        <div className="flex min-h-0 flex-col bg-white dark:bg-[#121212]">
           <Header />
 
           <main className="scrollbar-subtle min-h-0 flex-1 overflow-y-auto">

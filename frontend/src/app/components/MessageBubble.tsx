@@ -17,8 +17,8 @@ export function MessageBubble({ message }: MessageBubbleProps) {
         className={[
           "w-full max-w-3xl rounded-md border px-5 py-3 shadow-[0_16px_34px_rgba(118,133,160,0.10)]",
           isAssistant
-            ? "border-slate-200/80 bg-white/84 dark:border-slate-800 dark:bg-slate-900/85"
-            : "border-indigo-200 bg-linear-to-br from-indigo-50 to-white dark:border-blue-500/20 dark:from-blue-500/15 dark:to-slate-900",
+            ? "border-slate-200/80 bg-white/84 dark:border-slate-800 dark:bg-[#121212]"
+            : "border-indigo-200 bg-linear-to-br from-[#edf3ff] to-white dark:border-blue-500/20 dark:from-blue-500/15 dark:to-[#121212]",
         ].join(" ")}
       >
         <div className="mb-3 flex items-center justify-between gap-4">
@@ -36,7 +36,7 @@ export function MessageBubble({ message }: MessageBubbleProps) {
         </div>
 
         {message.status === "error" && message.error ? (
-          <p className="mt-3 rounded-[20px] border border-rose-200 bg-rose-50 px-3 py-2 text-sm text-rose-900">
+          <p className="mt-3 rounded-[20px] border border-blue-200 bg-[#edf3ff] px-3 py-2 text-sm text-[#2563eb] dark:border-blue-500/30 dark:bg-blue-500/10 dark:text-blue-300">
             {message.error}
           </p>
         ) : null}

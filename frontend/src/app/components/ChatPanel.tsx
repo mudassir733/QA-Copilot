@@ -143,7 +143,7 @@ export function ChatPanel() {
 
   return (
     <div className="flex flex-col gap-6">
-      <div className="flex min-h-180 flex-col overflow-hidden rounded-md border border-slate-200/80 bg-white/65 shadow-[0_14px_40px_rgba(118,133,160,0.08)] dark:border-slate-800 dark:bg-slate-900/75">
+      <div className="flex min-h-180 flex-col overflow-hidden rounded-md border border-slate-200/80 bg-white/65 shadow-[0_14px_40px_rgba(118,133,160,0.08)] dark:border-slate-800 dark:bg-[#121212]">
         <div className="flex items-center justify-between gap-4 border-b border-slate-200/70 px-5 py-4 dark:border-slate-800">
           <div>
             <h3 className="text-sm font-semibold text-slate-900 dark:text-slate-100">Conversation</h3>
@@ -156,7 +156,7 @@ export function ChatPanel() {
             <button
               type="button"
               onClick={stopStreaming}
-              className="rounded-full border border-rose-200 bg-rose-50 px-4 py-2 text-xs font-medium text-rose-700 transition hover:bg-rose-100"
+              className="rounded-full border border-blue-200 bg-[#edf3ff] px-4 py-2 text-xs font-medium text-[#2563eb] transition hover:bg-blue-100 dark:border-blue-500/30 dark:bg-blue-500/10 dark:text-blue-300"
             >
               Stop response
             </button>
@@ -166,7 +166,7 @@ export function ChatPanel() {
         <div className="scrollbar-subtle flex-1 overflow-y-auto px-5 py-5">
           {messages.length === 0 ? (
             <div className="flex h-full items-center justify-center">
-              <div className="max-w-xl rounded-md border border-slate-200 bg-[#fbfaf7] px-6 py-10 text-center shadow-[0_14px_40px_rgba(118,133,160,0.08)] dark:border-slate-800 dark:bg-slate-950">
+              <div className="max-w-xl rounded-md border border-slate-200 bg-white px-6 py-10 text-center shadow-[0_14px_40px_rgba(118,133,160,0.08)] dark:border-slate-800 dark:bg-[#121212]">
                 <h3 className="mt-3 text-2xl font-semibold text-slate-900 dark:text-slate-100">
                   Start with a grounded question
                 </h3>
@@ -188,7 +188,7 @@ export function ChatPanel() {
 
         <div className="border-t border-slate-200/70 px-5 py-5 dark:border-slate-800">
           {requestError ? (
-            <div className="mb-3 rounded-3xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-900">
+            <div className="mb-3 rounded-3xl border border-blue-200 bg-[#edf3ff] px-4 py-3 text-sm text-[#2563eb] dark:border-blue-500/30 dark:bg-blue-500/10 dark:text-blue-300">
               {requestError}
 
 
@@ -212,7 +212,7 @@ export function ChatPanel() {
                 }}
                 placeholder="Ask a question about the uploaded documents..."
                 rows={4}
-                className="font-technical w-full h-14 max-h-4/12 resize-none rounded-md border border-slate-200 bg-[#fbfaf7] px-4 py-3 text-sm leading-7 text-slate-800 outline-none transition placeholder:text-slate-400 focus:border-indigo-300 focus:ring-2 focus:ring-indigo-200 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100 dark:placeholder:text-slate-500 dark:focus:border-blue-400 dark:focus:ring-blue-500/20"
+                className="font-technical w-full h-14 max-h-4/12 resize-none rounded-md border border-slate-200 bg-white px-4 py-3 text-sm leading-7 text-slate-800 outline-none transition placeholder:text-slate-400 focus:border-indigo-300 focus:ring-2 focus:ring-indigo-200 dark:border-slate-700 dark:bg-[#2C2C2A] dark:text-slate-100 dark:placeholder:text-slate-500 dark:focus:border-blue-400 dark:focus:ring-blue-500/20"
               />
 
               <button
@@ -236,7 +236,7 @@ export function ChatPanel() {
                       )
                     }
                     disabled={isStreaming}
-                    className="min-w-45 appearance-none rounded-md border border-slate-200 bg-white px-4 py-2 pr-10 text-sm font-medium text-slate-800 outline-none transition focus:border-indigo-300 focus:ring-2 focus:ring-indigo-200 disabled:cursor-not-allowed dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:focus:border-blue-400 cursor-pointer dark:focus:ring-blue-500/20"
+                    className="min-w-45 appearance-none rounded-md border border-slate-200 bg-white px-4 py-2 pr-10 text-sm font-medium text-slate-800 outline-none transition focus:border-indigo-300 focus:ring-2 focus:ring-indigo-200 disabled:cursor-not-allowed dark:border-slate-700 dark:bg-[#121212] dark:text-slate-100 dark:focus:border-blue-400 cursor-pointer dark:focus:ring-blue-500/20"
                   >
                     {MODEL_OPTIONS.map((option) => (
                       <option key={option.value} value={option.value}>

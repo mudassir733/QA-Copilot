@@ -7,7 +7,7 @@ type SourceCardProps = {
 
 export function SourceCard({ source, index }: SourceCardProps) {
   return (
-    <details className="group rounded-3xl border border-slate-200 bg-[#fcfaf6] transition-colors open:border-indigo-200 open:bg-indigo-50/45 dark:border-slate-800 dark:bg-slate-950 dark:open:border-blue-500/30 dark:open:bg-blue-500/10">
+    <details className="group rounded-3xl border border-slate-200 bg-white transition-colors open:border-indigo-200 open:bg-[#edf3ff] dark:border-slate-800 dark:bg-[#121212] dark:open:border-blue-500/30 dark:open:bg-blue-500/10">
       <summary className="flex cursor-pointer list-none items-center justify-between gap-4 px-4 py-3">
         <div className="min-w-0 space-y-1">
           <p className="truncate text-sm font-medium text-slate-900 dark:text-slate-100">
@@ -21,7 +21,7 @@ export function SourceCard({ source, index }: SourceCardProps) {
 
         <div className="flex items-center gap-2">
           {typeof source.score === "number" ? (
-            <span className="font-technical rounded-full border border-emerald-200 bg-emerald-50 px-2.5 py-1 text-[11px] text-emerald-700 dark:border-emerald-500/30 dark:bg-emerald-500/10 dark:text-emerald-300">
+            <span className="font-technical rounded-full border border-indigo-200 bg-[#edf3ff] px-2.5 py-1 text-[11px] text-indigo-700 dark:border-blue-500/30 dark:bg-blue-500/10 dark:text-blue-300">
               {(source.score * 100).toFixed(0)}% match
             </span>
           ) : null}

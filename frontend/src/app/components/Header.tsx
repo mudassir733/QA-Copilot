@@ -39,7 +39,7 @@ function Header() {
     }, [theme]);
 
     return (
-        <header className="shrink-0 border-b border-slate-200/80 bg-white px-4 py-2 dark:border-slate-800 dark:bg-slate-950 sm:px-6 lg:px-8">
+        <header className="shrink-0 border-b border-slate-200/80 bg-white px-4 py-2 dark:border-slate-800 dark:bg-[#1D1D1C] sm:px-6 lg:px-8">
             <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
                 <div className="space-y-1">
                     <h2 className="text-2xl font-semibold tracking-tight text-slate-900 dark:text-slate-100">

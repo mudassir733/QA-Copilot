@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { startTransition, useRef, useState } from "react";
+import { startTransition, useEffect, useMemo, useRef, useState } from "react";
 
 import { listSources, uploadDocument } from "@/app/lib/api";
 import type { IngestResponse, SourceDocument } from "@/app/types";
@@ -20,10 +20,42 @@ export function UploadPanel({ initialSources }: UploadPanelProps) {
   const router = useRouter();
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [textPreview, setTextPreview] = useState<string>("");
   const [uploadState, setUploadState] = useState<UploadState>({ status: "idle" });
   const [sources, setSources] = useState<SourceDocument[]>(initialSources);
   const [isLoadingSources, setIsLoadingSources] = useState(false);
   const [sourcesError, setSourcesError] = useState<string | null>(null);
+  const filePreviewUrl = useMemo(() => {
+    if (!selectedFile) {
+      return null;
+    }
+
+    return URL.createObjectURL(selectedFile);
+  }, [selectedFile]);
+
+  useEffect(() => {
+    return () => {
+      if (filePreviewUrl) {
+        URL.revokeObjectURL(filePreviewUrl);
+      }
+    };
+  }, [filePreviewUrl]);
+
+  async function handleFileChange(file: File | null) {
+    setSelectedFile(file);
+
+    if (!file || !file.name.toLowerCase().endsWith(".txt")) {
+      setTextPreview("");
+      return;
+    }
+
+    try {
+      const content = await file.text();
+      setTextPreview(content.slice(0, 1500));
+    } catch {
+      setTextPreview("");
+    }
+  }
 
   async function loadSources() {
     try {
@@ -82,30 +114,86 @@ export function UploadPanel({ initialSources }: UploadPanelProps) {
         </div>
       </div>
 
-      <div className="rounded-[30px] border border-slate-200/80 bg-white/70 p-5 shadow-[0_14px_40px_rgba(118,133,160,0.10)] dark:border-slate-800 dark:bg-slate-900/80">
+      <div className="rounded-md border border-slate-200/80 bg-white/70 p-5 shadow-[0_14px_40px_rgba(118,133,160,0.10)] dark:border-slate-800 dark:bg-[#121212]">
         <label
           htmlFor="document-upload"
           className="mb-3 block text-sm font-medium text-slate-800 dark:text-slate-100"
         >
           Choose a document
         </label>
-        <input
-          ref={inputRef}
-          id="document-upload"
-          type="file"
-          accept=".pdf,.txt,.docx"
-          onChange={(event) => setSelectedFile(event.target.files?.[0] ?? null)}
-          className="block w-full rounded-3xl border border-dashed border-slate-300 bg-[#f9f6f0] px-4 py-5 h-80 text-sm text-slate-600 file:mr-4 file:rounded-full file:border-0 file:bg-indigo-500/12 file:px-4 file:py-2 file:text-sm file:font-medium file:text-indigo-700 hover:file:bg-indigo-500/20 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-300 dark:file:bg-blue-500/20 dark:file:text-blue-200"
-        />
+
+        <div className="flex h-80 items-center justify-center rounded-md border-2 border-dashed border-slate-300 bg-white p-6 text-center dark:border-slate-700 dark:bg-[#121212]">
+          <div className="space-y-4">
+            <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-md bg-indigo-500/10 text-indigo-600 dark:bg-blue-500/15 dark:text-blue-300">
+              <svg viewBox="0 0 24 24" className="h-8 w-8" fill="none" stroke="currentColor" strokeWidth="1.8">
+                <path d="M12 16V4" />
+                <path d="M7.5 8.5 12 4l4.5 4.5" />
+                <path d="M4 16.5v1.5A2 2 0 0 0 6 20h12a2 2 0 0 0 2-2v-1.5" />
+              </svg>
+            </div>
+            <div className="space-y-2">
+              <p className="text-base font-medium text-slate-800 dark:text-slate-100">
+                Select a file to preview and upload
+              </p>
+              <p className="text-sm text-slate-500 dark:text-slate-400">
+                Supported formats: PDF, TXT, DOCX
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={() => inputRef.current?.click()}
+              className="inline-flex h-12 items-center justify-center rounded-md border border-indigo-200 bg-white px-6 text-sm font-semibold text-indigo-700 transition hover:bg-[#edf3ff] dark:border-blue-500/30 dark:bg-[#121212] dark:text-blue-300 dark:hover:bg-blue-500/10"
+            >
+              Choose File
+            </button>
+            <input
+              ref={inputRef}
+              id="document-upload"
+              type="file"
+              accept=".pdf,.txt,.docx"
+              onChange={(event) => void handleFileChange(event.target.files?.[0] ?? null)}
+              className="hidden"
+            />
+          </div>
+        </div>
 
         {selectedFile ? (
-          <div className="mt-4 rounded-3xl border border-indigo-200 bg-indigo-50/80 px-4 py-3">
-            <p className="truncate text-sm font-medium text-indigo-900">
-              {selectedFile.name}
-            </p>
-            <p className="font-technical mt-1 text-xs text-indigo-700/80">
-              {(selectedFile.size / 1024 / 1024).toFixed(2)} MB
-            </p>
+          <div className="mt-4 space-y-4 rounded-md border border-indigo-200 bg-[#edf3ff] p-4 dark:border-blue-500/20 dark:bg-blue-500/10">
+            <div>
+              <p className="truncate text-sm font-medium text-indigo-900 dark:text-blue-100">
+                {selectedFile.name}
+              </p>
+              <p className="font-technical mt-1 text-xs text-indigo-700/80 dark:text-blue-300/80">
+                {(selectedFile.size / 1024 / 1024).toFixed(2)} MB
+              </p>
+            </div>
+
+            {selectedFile.name.toLowerCase().endsWith(".pdf") && filePreviewUrl ? (
+              <iframe
+                src={filePreviewUrl}
+                title={selectedFile.name}
+                className="h-72 w-full rounded-md border border-indigo-200 bg-white dark:border-blue-500/20 dark:bg-[#121212]"
+              />
+            ) : null}
+
+            {selectedFile.name.toLowerCase().endsWith(".txt") ? (
+              <pre className="font-technical max-h-72 overflow-auto whitespace-pre-wrap rounded-md border border-indigo-200 bg-white p-4 text-xs leading-6 text-slate-700 dark:border-blue-500/20 dark:bg-[#121212] dark:text-slate-300">
+                {textPreview || "Loading text preview..."}
+              </pre>
+            ) : null}
+
+            {selectedFile.name.toLowerCase().endsWith(".docx") ? (
+              <div className="flex min-h-40 items-center justify-center rounded-md border border-indigo-200 bg-white px-4 py-6 text-center dark:border-blue-500/20 dark:bg-[#121212]">
+                <div className="space-y-2">
+                  <p className="text-sm font-medium text-slate-800 dark:text-slate-100">
+                    DOCX preview ready
+                  </p>
+                  <p className="text-xs leading-6 text-slate-500 dark:text-slate-400">
+                    {selectedFile.name} is selected and ready to upload.
+                  </p>
+                </div>
+              </div>
+            ) : null}
           </div>
         ) : null}
 
@@ -113,15 +201,15 @@ export function UploadPanel({ initialSources }: UploadPanelProps) {
           type="button"
           onClick={() => void handleUpload()}
           disabled={!selectedFile || uploadState.status === "uploading"}
-          className="mt-4 inline-flex h-12 w-full items-center justify-center rounded-[22px] bg-slate-900 px-4 text-sm font-semibold text-white transition hover:bg-slate-800 disabled:cursor-not-allowed disabled:bg-slate-300 disabled:text-slate-500"
+          className="mt-4 inline-flex h-12 w-full items-center justify-center rounded-md bg-slate-900 px-4 text-sm font-semibold text-white transition hover:bg-slate-800 disabled:cursor-not-allowed disabled:bg-slate-300 disabled:text-slate-500"
         >
           {uploadState.status === "uploading" ? "Uploading..." : "Upload document"}
         </button>
 
         {uploadState.status === "uploading" ? (
           <div className="mt-4 space-y-2">
-            <div className="h-2 overflow-hidden rounded-full bg-slate-200">
-              <div className="h-full w-2/3 animate-pulse rounded-full bg-indigo-500" />
+            <div className="h-2 overflow-hidden rounded-md bg-slate-200">
+              <div className="h-full w-2/3 animate-pulse rounded-md bg-indigo-500" />
             </div>
             <p className="font-technical text-xs text-slate-500">
               Processing your file and preparing the source index.
@@ -130,7 +218,7 @@ export function UploadPanel({ initialSources }: UploadPanelProps) {
         ) : null}
 
         {uploadState.status === "success" ? (
-          <div className="mt-4 rounded-3xl border border-emerald-200 bg-emerald-50/90 px-4 py-3 text-sm text-emerald-900">
+          <div className="mt-4 rounded-md border border-emerald-200 bg-emerald-50/90 px-4 py-3 text-sm text-emerald-900">
             <p className="font-medium">{uploadState.response.filename} ingested successfully.</p>
             <p className="mt-1 text-emerald-700/90">
               {uploadState.response.chunk_count} chunks created in{" "}
@@ -140,13 +228,13 @@ export function UploadPanel({ initialSources }: UploadPanelProps) {
         ) : null}
 
         {uploadState.status === "error" ? (
-          <div className="mt-4 rounded-3xl border border-rose-200 bg-rose-50/90 px-4 py-3 text-sm text-rose-900">
+          <div className="mt-4 rounded-md border border-rose-200 bg-rose-50/90 px-4 py-3 text-sm text-rose-900">
             {uploadState.message}
           </div>
         ) : null}
       </div>
 
-      <div className="flex min-h-105 flex-col rounded-[30px] border border-slate-200/80 bg-white/65 shadow-[0_14px_40px_rgba(118,133,160,0.08)] dark:border-slate-800 dark:bg-slate-900/75">
+      <div className="flex min-h-105 flex-col rounded-md border border-slate-200/80 bg-white/65 shadow-[0_14px_40px_rgba(118,133,160,0.08)] dark:border-slate-800 dark:bg-[#121212]">
         <div className="flex items-center justify-between gap-4 border-b border-slate-200/70 px-5 py-4 dark:border-slate-800">
           <div>
             <h3 className="text-sm font-semibold text-slate-900 dark:text-slate-100">Your library</h3>
@@ -157,7 +245,7 @@ export function UploadPanel({ initialSources }: UploadPanelProps) {
           <button
             type="button"
             onClick={() => void loadSources()}
-            className="rounded-full border border-slate-200 bg-white/80 px-3 py-1.5 text-xs text-slate-600 transition hover:border-indigo-200 hover:text-indigo-700 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300 dark:hover:border-blue-400 dark:hover:text-blue-300"
+            className="rounded-md border border-slate-200 bg-white/80 px-3 py-1.5 text-xs text-slate-600 transition hover:border-indigo-200 hover:text-indigo-700 dark:border-slate-700 dark:bg-[#121212] dark:text-slate-300 dark:hover:border-blue-400 dark:hover:text-blue-300"
           >
             Refresh
           </button>
@@ -169,16 +257,16 @@ export function UploadPanel({ initialSources }: UploadPanelProps) {
               {Array.from({ length: 3 }).map((_, index) => (
                 <div
                   key={index}
-                  className="h-20 animate-pulse rounded-3xl border border-slate-200/60 bg-white/70 dark:border-slate-800 dark:bg-slate-900"
+                  className="h-20 animate-pulse rounded-md border border-slate-200/60 bg-white/70 dark:border-slate-800 dark:bg-[#121212]"
                 />
               ))}
             </div>
           ) : sourcesError ? (
-            <div className="rounded-3xl border border-rose-200 bg-rose-50/90 px-4 py-3 text-sm text-rose-900">
+            <div className="rounded-md border border-rose-200 bg-rose-50/90 px-4 py-3 text-sm text-rose-900">
               {sourcesError}
             </div>
           ) : sources.length === 0 ? (
-            <div className="rounded-3xl border border-dashed border-slate-300 bg-[#faf7f1] px-4 py-6 text-sm leading-7 text-slate-500 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-400">
+            <div className="rounded-md border border-dashed border-slate-300 bg-white px-4 py-6 text-sm leading-7 text-slate-500 dark:border-slate-700 dark:bg-[#121212] dark:text-slate-400">
               No documents have been ingested yet. Upload one to populate the knowledge base.
             </div>
           ) : (
@@ -186,7 +274,8 @@ export function UploadPanel({ initialSources }: UploadPanelProps) {
               {sources.map((source) => (
                 <li
                   key={`${source.collection_name}-${source.source}`}
-                  className="rounded-3xl border border-slate-200/80 bg-white/85 px-4 py-3 shadow-[0_8px_24px_rgba(130,145,160,0.08)] dark:border-slate-800 dark:bg-slate-950/90"
+                  className="rounded-md border border-slate-200/80 bg-white/85 px-4 py-3 
+                   dark:border-slate-800 dark:bg-[#121212]"
                 >s
                   <div className="flex items-start justify-between gap-4">
                     <div className="min-w-0">
@@ -197,7 +286,7 @@ export function UploadPanel({ initialSources }: UploadPanelProps) {
                         {source.collection_name}
                       </p>
                     </div>
-                    <span className="font-technical rounded-full border border-indigo-200 bg-indigo-50 px-2.5 py-1 text-[11px] text-indigo-700 dark:border-blue-500/30 dark:bg-blue-500/10 dark:text-blue-300">
+                    <span className="font-technical rounded-md border border-indigo-200 bg-[#edf3ff] px-2.5 py-1 text-[11px] text-indigo-700 dark:border-blue-500/30 dark:bg-blue-500/10 dark:text-blue-300">
                       {source.chunk_count} chunks
                     </span>
                   </div>
