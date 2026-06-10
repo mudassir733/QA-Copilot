@@ -1,17 +1,4 @@
-"""
-app/api/ingest.py
 
-HTTP layer for document ingestion.
-
-
-Separating HTTP concerns from business logic makes both easier to test
-and means the ingest pipeline could be called from a CLI or scheduler too.
-
-Endpoints:
-  POST   /ingest/upload         — upload and ingest a document
-  GET    /ingest/sources        — list all ingested documents
-  DELETE /ingest/source/{name}  — remove a document's chunks
-"""
 
 import os
 import uuid

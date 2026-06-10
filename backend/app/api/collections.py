@@ -1,12 +1,4 @@
-"""
-app/api/collections.py
 
-REST endpoints to inspect and manage ChromaDB collections.
-
-GET  /collections               — list all collections
-GET  /collections/{name}/stats  — doc count + existence check
-DELETE /collections/{name}      — permanently delete a collection
-"""
 
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel

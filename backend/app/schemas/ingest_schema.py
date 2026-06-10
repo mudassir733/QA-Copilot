@@ -1,14 +1,4 @@
-"""
-app/schemas/ingest_schema.py
 
-Pydantic models for the ingestion endpoints.
-
-What is a Pydantic schema?
-  It's a typed blueprint that FastAPI uses to:
-  1. Validate incoming request data
-  2. Shape and document outgoing response data
-  3. Auto-generate the Swagger UI docs
-"""
 
 from pydantic import BaseModel, Field
 

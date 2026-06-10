@@ -1,10 +1,3 @@
-"""
-app/api/health.py
-
-Health-check endpoints.
-GET /health          — basic liveness probe
-GET /health/llm      — checks which LLM providers are configured
-"""
 
 from fastapi import APIRouter
 from pydantic import BaseModel
