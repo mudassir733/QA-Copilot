@@ -15,25 +15,20 @@ export function MessageBubble({ message }: MessageBubbleProps) {
     >
       <div
         className={[
-          "w-full max-w-3xl rounded-3xl border px-5 py-4 shadow-[0_14px_38px_rgba(0,0,0,0.24)]",
+          "w-full max-w-3xl rounded-md border px-5 py-3 shadow-[0_16px_34px_rgba(118,133,160,0.10)]",
           isAssistant
-            ? "border-white/8 bg-white/[0.035]"
-            : "border-indigo-400/20 bg-indigo-500/[0.14]",
+            ? "border-slate-200/80 bg-white/84 dark:border-slate-800 dark:bg-slate-900/85"
+            : "border-indigo-200 bg-linear-to-br from-indigo-50 to-white dark:border-blue-500/20 dark:from-blue-500/15 dark:to-slate-900",
         ].join(" ")}
       >
         <div className="mb-3 flex items-center justify-between gap-4">
-          <p className="font-technical text-xs uppercase tracking-[0.22em] text-slate-400">
+          <p className="font-technical text-xs uppercase tracking-[0.22em] text-slate-500 dark:text-slate-400">
             {isAssistant ? "Assistant" : "You"}
           </p>
 
-          {isAssistant && message.model ? (
-            <p className="font-technical text-[11px] text-slate-500">
-              {message.provider} / {message.model}
-            </p>
-          ) : null}
         </div>
 
-        <div className="font-technical whitespace-pre-wrap text-sm leading-7 text-slate-100">
+        <div className="font-technical whitespace-pre-wrap text-sm leading-7 text-slate-800 dark:text-slate-100">
           {message.content || (message.status === "streaming" ? "Thinking" : "")}
           {message.status === "streaming" ? (
             <span className="streaming-cursor" aria-hidden="true" />
@@ -41,7 +36,7 @@ export function MessageBubble({ message }: MessageBubbleProps) {
         </div>
 
         {message.status === "error" && message.error ? (
-          <p className="mt-3 rounded-2xl border border-rose-400/20 bg-rose-500/8 px-3 py-2 text-sm text-rose-200">
+          <p className="mt-3 rounded-[20px] border border-rose-200 bg-rose-50 px-3 py-2 text-sm text-rose-900">
             {message.error}
           </p>
         ) : null}
@@ -49,12 +44,10 @@ export function MessageBubble({ message }: MessageBubbleProps) {
         {isAssistant && message.sources.length > 0 ? (
           <div className="mt-5 space-y-3">
             <div className="flex items-center justify-between gap-4">
-              <p className="font-technical text-xs uppercase tracking-[0.18em] text-slate-400">
+              <p className="font-technical text-xs tracking-[0.18em] text-slate-500 dark:text-slate-400">
                 Source Citations
               </p>
-              <span className="font-technical text-xs text-slate-500">
-                {message.sources.length} chunk{message.sources.length === 1 ? "" : "s"}
-              </span>
+
             </div>
 
             <div className="space-y-3">

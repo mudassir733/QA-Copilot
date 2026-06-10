@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { AppShell } from "@/app/components/AppShell";
 import { Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 
@@ -26,7 +27,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${jetBrainsMono.variable} h-full`}>
-      <body className={`${inter.className} min-h-full`}>{children}</body>
+      <body className={`${inter.className} h-full overflow-hidden`}>
+        <AppShell>{children}</AppShell>
+      </body>
     </html>
   );
 }
